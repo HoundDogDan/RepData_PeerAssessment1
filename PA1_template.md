@@ -212,16 +212,9 @@ new_int_activity <- new_df %>% group_by(weekend, interval) %>% summarize(meanste
 
 
 ```r
-#plot all that data
-plot(new_int_activity$interval, new_int_activity$meansteps, type="l", main="interval", xlab="x interval", ylab="avg steps")
-```
-
-![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
-
-```r
 qplot(interval, meansteps, data=new_int_activity, facets = weekend ~ ., geom="line", main="Mean number of steps", ylab="mean steps")
 ```
 
-![plot of chunk unnamed-chunk-24](figure/unnamed-chunk-24-1.png) 
+![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
 
 
