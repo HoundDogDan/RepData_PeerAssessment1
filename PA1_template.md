@@ -2,8 +2,9 @@
 title: "Reproducible Research - Peer Assessment 1"
 author: "Danny Scott"
 date: "Saturday, June 13, 2015"
-output: html_document 
-  keep_md: true
+output:
+  html_document:
+    keep_md: yes
 ---
 
 #Reproducible Research - Peer Assesment 1
@@ -36,25 +37,11 @@ library(dplyr)
 
 ```r
 #Read in the data file
-all_activity <- read.csv("activity.csv")
-```
+all_activity <- read.csv(unz("activity.zip", filename="activity.csv"))
 
-```
-## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
-## or directory
-```
 
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
 #format date variable
 all_activity$date <- as.Date(all_activity$date)
-```
-
-```
-## Error in as.Date(all_activity$date): object 'all_activity' not found
 ```
 
 
@@ -66,19 +53,13 @@ all_activity$date <- as.Date(all_activity$date)
 sum_activity <- all_activity %>% filter(!is.na(steps)) %>% group_by(date) %>% summarize(sumsteps = sum(steps))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'all_activity' not found
-```
-
 
 ```r
 #Histogram
 hist(sum_activity$sumsteps, breaks=12, col="lightblue", xlab="total steps per day", main="Histogram of total steps per day" )
 ```
 
-```
-## Error in hist(sum_activity$sumsteps, breaks = 12, col = "lightblue", xlab = "total steps per day", : object 'sum_activity' not found
-```
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 ```r
 #mean of total steps per day
@@ -86,7 +67,7 @@ mean(sum_activity$sumsteps)
 ```
 
 ```
-## Error in mean(sum_activity$sumsteps): object 'sum_activity' not found
+## [1] 10766.19
 ```
 
 ```r
@@ -95,7 +76,7 @@ median(sum_activity$sumsteps)
 ```
 
 ```
-## Error in median(sum_activity$sumsteps): object 'sum_activity' not found
+## [1] 10765
 ```
 
 ##Question 2 - What is the average daily activity pattern?
@@ -106,26 +87,16 @@ median(sum_activity$sumsteps)
 int_activity <- all_activity %>% filter(!is.na(steps)) %>% group_by(interval) %>% summarize(meansteps = mean(steps))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'all_activity' not found
-```
-
 ```r
 #plot all that data
 plot(int_activity$interval, int_activity$meansteps, type="l", main="Average steps by interval", xlab="5 min interval", ylab="avg steps")
 ```
 
-```
-## Error in plot(int_activity$interval, int_activity$meansteps, type = "l", : object 'int_activity' not found
-```
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 
 ```r
 #the interval with the highest average no. of steps
 max_avg_interval <- int_activity %>% filter(meansteps == max(meansteps))
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'int_activity' not found
 ```
 
 
@@ -137,17 +108,9 @@ max_avg_interval <- int_activity %>% filter(meansteps == max(meansteps))
 median_activity <- all_activity %>% filter(!is.na(steps)) %>% group_by(interval) %>% summarize(mediansteps = median(steps))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'all_activity' not found
-```
-
 ```r
 #how many in-complete cases (truth table)
 all_NA <- !complete.cases(all_activity)
-```
-
-```
-## Error in complete.cases(all_activity): object 'all_activity' not found
 ```
 
 ```r
@@ -156,7 +119,7 @@ sum(all_NA)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'all_NA' not found
+## [1] 2304
 ```
 
 
@@ -164,18 +127,7 @@ sum(all_NA)
 #using the medians (median_activity), we'll fill in the missing data with the median for that interval
 
 new_all_activity <- all_activity %>% filter(!is.na(steps))
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'all_activity' not found
-```
-
-```r
 new_all_na_activity <- all_activity %>% filter(is.na(steps))
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'all_activity' not found
 ```
 
 ```r
@@ -183,34 +135,15 @@ new_all_na_activity <- all_activity %>% filter(is.na(steps))
 added <- merge(new_all_na_activity, median_activity, by="interval")
 ```
 
-```
-## Error in merge(new_all_na_activity, median_activity, by = "interval"): object 'new_all_na_activity' not found
-```
-
 ```r
 #copy the values to the original steps variable
 added$steps <- added$mediansteps
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'added' not found
-```
-
 ```r
 #drop the column to prepare for the row bind
 added$mediansteps <- NULL
-```
-
-```
-## Error in added$mediansteps <- NULL: object 'added' not found
-```
-
-```r
 new_df <- rbind(added, new_all_activity)
-```
-
-```
-## Error in rbind(added, new_all_activity): object 'added' not found
 ```
 
 
@@ -219,19 +152,13 @@ new_df <- rbind(added, new_all_activity)
 sum_new_df <- new_df %>% filter(!is.na(steps)) %>% group_by(date) %>% summarize(sumsteps = sum(steps))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'new_df' not found
-```
-
 
 ```r
 #Histogram
 hist(sum_new_df$sumsteps, breaks=12, col="lightblue", xlab="total steps per day", main="Histogram of total steps per day" )
 ```
 
-```
-## Error in hist(sum_new_df$sumsteps, breaks = 12, col = "lightblue", xlab = "total steps per day", : object 'sum_new_df' not found
-```
+![plot of chunk unnamed-chunk-18](figure/unnamed-chunk-18-1.png) 
 
 
 ```r
@@ -240,7 +167,7 @@ mean(sum_new_df$sumsteps)
 ```
 
 ```
-## Error in mean(sum_new_df$sumsteps): object 'sum_new_df' not found
+## [1] 9503.869
 ```
 
 
@@ -250,7 +177,7 @@ median(sum_new_df$sumsteps)
 ```
 
 ```
-## Error in median(sum_new_df$sumsteps): object 'sum_new_df' not found
+## [1] 10395
 ```
 
 
@@ -271,34 +198,10 @@ changes the curve
 #Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 new_df$weekend <- "weekday"
-```
-
-```
-## Error in new_df$weekend <- "weekday": object 'new_df' not found
-```
-
-```r
 new_df$weekend[ which( (weekdays(new_df$date)=="Sunday") )] <- "weekend"
-```
-
-```
-## Error in new_df$weekend[which((weekdays(new_df$date) == "Sunday"))] <- "weekend": object 'new_df' not found
-```
-
-```r
 new_df$weekend[ which( (weekdays(new_df$date)=="Saturday") )] <- "weekend"
-```
 
-```
-## Error in new_df$weekend[which((weekdays(new_df$date) == "Saturday"))] <- "weekend": object 'new_df' not found
-```
-
-```r
 new_df$weekend <- as.factor(new_df$weekend)
-```
-
-```
-## Error in is.factor(x): object 'new_df' not found
 ```
 
 
@@ -307,27 +210,18 @@ new_df$weekend <- as.factor(new_df$weekend)
 new_int_activity <- new_df %>% group_by(weekend, interval) %>% summarize(meansteps = mean(steps))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'new_df' not found
-```
-
 
 ```r
 #plot all that data
 plot(new_int_activity$interval, new_int_activity$meansteps, type="l", main="interval", xlab="x interval", ylab="avg steps")
 ```
 
-```
-## Error in plot(new_int_activity$interval, new_int_activity$meansteps, type = "l", : object 'new_int_activity' not found
-```
+![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
 
 ```r
 qplot(interval, meansteps, data=new_int_activity, facets = weekend ~ ., geom="line", main="Mean number of steps", ylab="mean steps")
 ```
 
-```
-## Error in ggplot(data, aesthetics, environment = env): object 'new_int_activity' not found
-```
-
+![plot of chunk unnamed-chunk-24](figure/unnamed-chunk-24-1.png) 
 
 
